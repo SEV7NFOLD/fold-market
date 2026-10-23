@@ -14,7 +14,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
     count: lines.reduce((sum, line) => sum + line.quantity, 0),
     add: (product) => setLines((current) => {
       const found = current.find((line) => line.product.id === product.id);
-      return found ? current.map((line) => line.product.id === product.id ? { ...line, quantity: line.quantity + 1 } : line) : [...current, { product, quantity: 1 }];
+      if (product.inventory <= 0 || (found && found.quantity >= product.inventory)) return current;
+      return found ? current.map((line) => line.product.id === product.id ? { ...line, quantity: Math.min(line.quantity + 1, product.inventory) } : line) : [...current, { product, quantity: 1 }];
     }),
     remove: (id) => setLines((current) => current.filter((line) => line.product.id !== id)),
     clear: () => setLines([]),

@@ -6,7 +6,7 @@ import { formatPrice } from "@/lib/demo-data";
 export function ProductCard({ product }: { product: Product }) {
   return <article className="product-card">
     <Link className={`product-visual ${product.tone}`} href={`/products/${product.slug}`} aria-label={`View ${product.name}`}>
-      {product.badge && <span className="product-badge">{product.badge}</span>}
+      {(product.inventory <= 0 || product.badge) && <span className="product-badge">{product.inventory <= 0 ? "Sold out" : product.badge}</span>}
       <Image src={product.image} alt={product.imageAlt} fill sizes="(max-width: 700px) 47vw, (max-width: 1100px) 30vw, 23vw" unoptimized />
       <span className="quick-view">Discover <span>↗</span></span>
     </Link>
