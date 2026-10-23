@@ -1,0 +1,169 @@
+:root {
+  --taupe: var(--brand-accent, #e90000);
+}
+
+.hero h1 em,
+.section-heading h2 em,
+.editorial-copy h2 em,
+.ritual-heading h2 em,
+.chef-copy h2 em,
+.newsletter h2 em,
+.about-hero h1 em,
+.about-story h2 em,
+.admin-welcome h1 em,
+.admin-new-head h2 em,
+.admin-auth-card h1 em {
+  color: var(--taupe);
+}
+
+.eyebrow-line,
+.promise-strip i,
+.hero-note strong,
+.hero-note-mark,
+.hero-note > svg,
+.hero-scroll span,
+.newsletter-flower {
+  color: var(--taupe);
+}
+
+.eyebrow-line,
+.hero-scroll span {
+  background: var(--taupe);
+}
+
+.main-nav a:hover,
+.footer-links a:hover,
+.icon-button:hover,
+.category-pills a.active,
+.category-pills button.active {
+  color: var(--taupe);
+}
+
+.main-nav a,
+.footer-links a,
+.icon-button,
+.underlined-link,
+.back-top,
+.admin-back,
+.inventory-edit summary {
+  transition: color 180ms ease, opacity 180ms ease;
+}
+
+.vendor-mark img {
+  width: 82px;
+  height: 62px;
+  object-fit: contain;
+  transition: transform 240ms ease;
+}
+
+.vendor-mark:hover img {
+  transform: scale(1.045);
+}
+
+.hero-copy {
+  animation: copy-arrive 650ms cubic-bezier(.2,.7,.25,1) both;
+}
+
+.hero-image-wrap > img {
+  animation: image-arrive 900ms cubic-bezier(.2,.6,.3,1) both;
+}
+
+.product-visual img,
+.editorial-art img,
+.chef-image img,
+.about-image img {
+  will-change: transform;
+}
+
+.product-card:hover .product-visual img {
+  transform: scale(1.045);
+}
+
+.product-card .product-copy h3 {
+  transition: color 180ms ease;
+}
+
+.product-card:hover .product-copy h3 {
+  color: var(--taupe);
+}
+
+.ritual-card {
+  transition: transform 350ms cubic-bezier(.2,.65,.3,1);
+}
+
+.ritual-card:hover {
+  transform: translateY(-4px);
+}
+
+.button-dark:hover {
+  background: var(--taupe);
+}
+
+.inventory-edit-form input[type="file"] {
+  min-height: 48px;
+  padding: 9px;
+  cursor: pointer;
+}
+
+.inventory-edit-form input[type="file"]::file-selector-button {
+  min-height: 29px;
+  margin: 0 10px 0 0;
+  padding: 0 12px;
+  border: 0;
+  background: #f1e9e7;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background 180ms ease;
+}
+
+.inventory-edit-form input[type="file"]::file-selector-button:hover {
+  background: #ead7d4;
+}
+
+.motion-ready [data-reveal] {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 650ms cubic-bezier(.2,.7,.25,1), transform 650ms cubic-bezier(.2,.7,.25,1);
+}
+
+.motion-ready [data-reveal].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.motion-ready [data-reveal] .product-card {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 520ms cubic-bezier(.2,.7,.25,1), transform 520ms cubic-bezier(.2,.7,.25,1);
+}
+
+.motion-ready [data-reveal].is-visible .product-card {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.motion-ready [data-reveal].is-visible .product-card:nth-child(2) { transition-delay: 70ms; }
+.motion-ready [data-reveal].is-visible .product-card:nth-child(3) { transition-delay: 140ms; }
+.motion-ready [data-reveal].is-visible .product-card:nth-child(4) { transition-delay: 210ms; }
+
+@keyframes copy-arrive {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes image-arrive {
+  from { opacity: .7; transform: scale(1.025); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-copy,
+  .hero-image-wrap > img {
+    animation: none;
+  }
+
+  .motion-ready [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+}

@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import "./interactions.css";
+import "./brand-motion.css";
 import { CartProvider } from "@/components/cart-provider";
 import { SiteHeader } from "@/components/site-header";
+import { ScrollReveal } from "@/components/scroll-reveal";
 import { getStorefront } from "@/lib/storefront";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -16,6 +18,6 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const { vendor } = await getStorefront();
-  return <html lang="en"><body style={{ "--brand-accent": vendor.accent } as React.CSSProperties}><CartProvider><SiteHeader />{children}</CartProvider></body></html>;
+  return <html lang="en"><body style={{ "--brand-accent": vendor.accent } as React.CSSProperties}><CartProvider><SiteHeader />{children}</CartProvider><ScrollReveal /></body></html>;
 }
 

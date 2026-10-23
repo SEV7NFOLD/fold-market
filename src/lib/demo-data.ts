@@ -4,8 +4,8 @@ export const demoVendor: Vendor = {
   id: "sev7n-fold-demo",
   name: "Prime Kare",
   handle: "prime-kare",
-  logo: "/brand/prime-care-original.svg",
-  accent: "#8f755e",
+  logo: "/brand/prime-kare-transparent.svg",
+  accent: "#e90000",
   currency: "NGN",
 };
 

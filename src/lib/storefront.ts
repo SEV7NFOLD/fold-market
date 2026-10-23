@@ -20,7 +20,7 @@ export async function getStorefront() {
     const vendor: Vendor = { ...demoVendor, id: "unconfigured", handle, name: handle.split("-").map((part) => part[0]?.toUpperCase() + part.slice(1)).join(" ") };
     return { vendor, products: [] as Product[], promotions: [] };
   }
-  const vendor: Vendor = { id: row.id, name: row.name, handle: row.handle, logo: row.logo_url || "/brand/prime-kare.svg", accent: row.accent_color || "#8f755e", currency: row.currency || "NGN", domain: row.custom_domain };
+  const vendor: Vendor = { id: row.id, name: row.name, handle: row.handle, logo: row.logo_url || "/brand/prime-kare-transparent.svg", accent: row.accent_color || "#e90000", currency: row.currency || "NGN", domain: row.custom_domain };
   const { data: rows, error } = await supabase.from("products").select("id,vendor_id,name,slug,category,price,compare_at,description,details,image_url,image_alt,accent_tone,featured,badge,inventory").eq("vendor_id", vendor.id).eq("status", "published").order("sort_order", { ascending: true });
   const { data: promos } = await supabase.from("service_promotions").select("id,title,description,image_url,cta_label,cta_url").eq("vendor_id", vendor.id).eq("is_active", true).order("sort_order", { ascending: true });
   if (error || !rows?.length) return { vendor, products: [] as Product[], promotions: promos || [] };

@@ -13,7 +13,7 @@ const productSchema = z.object({
   category: z.string().trim().min(2).max(60),
   price: z.coerce.number().int().nonnegative().max(100000000),
   description: z.string().trim().min(5).max(1200),
-  imageUrl: z.string().trim().url().max(500).refine((value) => new URL(value).protocol === "https:"),
+  imageUrl: z.string().trim().url().max(500).refine((value) => new URL(value).protocol === "https:").optional().or(z.literal("")),
   inventory: z.coerce.number().int().nonnegative().max(1000000),
   status: z.enum(["draft", "published"]),
 });
@@ -44,8 +44,34 @@ export async function saveProduct(formData: FormData) {
   if (!parsed.success) redirect("/admin?error=validation");
   const { id, vendorId, ...input } = parsed.data;
   const supabase = await requireEditor(vendorId);
+  const imageFile = formData.get("imageFile");
+  let imageUrl = input.imageUrl || "";
+  if (imageFile instanceof File && imageFile.size > 0) {
+    const extensionByType: Record<string, string> = { "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp", "image/avif": "avif" };
+    const extension = extensionByType[imageFile.type];
+    const signature = new Uint8Array(await imageFile.slice(0, 12).arrayBuffer());
+    const startsWith = (...bytes: number[]) => bytes.every((byte, index) => signature[index] === byte);
+    const validImage = imageFile.type === "image/jpeg" ? startsWith(0xff, 0xd8, 0xff)
+      : imageFile.type === "image/png" ? startsWith(0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a)
+      : imageFile.type === "image/webp" ? startsWith(0x52, 0x49, 0x46, 0x46) && String.fromCharCode(...signature.slice(8, 12)) === "WEBP"
+      : imageFile.type === "image/avif" ? String.fromCharCode(...signature.slice(4, 8)) === "ftyp" && ["avif", "avis"].includes(String.fromCharCode(...signature.slice(8, 12)))
+      : false;
+    if (!extension || !validImage || imageFile.size > 5 * 1024 * 1024) redirect("/admin?error=image");
+    const objectPath = `${vendorId}/${input.slug}/${crypto.randomUUID()}.${extension}`;
+    const { error: uploadError } = await supabase.storage.from("product-media").upload(objectPath, imageFile, {
+      contentType: imageFile.type,
+      cacheControl: "31536000",
+      upsert: false,
+    });
+    if (uploadError) redirect("/admin?error=upload");
+    imageUrl = supabase.storage.from("product-media").getPublicUrl(objectPath).data.publicUrl;
+  } else if (!imageUrl && id) {
+    const { data: existingProduct } = await supabase.from("products").select("image_url").eq("id", id).eq("vendor_id", vendorId).maybeSingle();
+    imageUrl = existingProduct?.image_url || "";
+  }
+  if (!imageUrl) redirect("/admin?error=validation");
   const record = { name: input.name, slug: input.slug, category: input.category, price: input.price,
-    description: input.description, image_url: input.imageUrl, inventory: input.inventory, status: input.status };
+    description: input.description, image_url: imageUrl, inventory: input.inventory, status: input.status };
   const { error } = id
     ? await supabase.from("products").update(record).eq("id", id).eq("vendor_id", vendorId)
     : await supabase.from("products").insert({ ...record, vendor_id: vendorId });
