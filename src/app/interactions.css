@@ -1,0 +1,5 @@
+.category-pills button{padding:9px 15px;border:1px solid #ddd6cb;color:#766e64;font-size:9px;letter-spacing:.07em;transition:all .2s;background:transparent;cursor:pointer}.category-pills button:hover,.category-pills button.active{background:#37312c;color:#fff;border-color:#37312c}
+.checkout-disabled{width:100%;background:#d7d0c6;color:#73695f;cursor:not-allowed}.chef-image img{object-fit:cover}
+.footer-bottom a{display:inline-flex;align-items:center;gap:6px}.attribution-logo{object-fit:contain!important;vertical-align:middle}
+@media (min-width:651px){.hero{grid-template-columns:52% 48%}.hero-copy{padding-left:clamp(30px,7vw,105px);padding-right:clamp(22px,3vw,46px)}.hero-scroll{right:calc(48% + 15px)}}
+@media (min-width:651px) and (max-width:900px){.hero h1{font-size:clamp(43px,6.2vw,62px)}}
