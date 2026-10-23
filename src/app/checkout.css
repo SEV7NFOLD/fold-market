@@ -1,0 +1,22 @@
+.checkout-intro{margin:21px 0;color:#766d63;font-size:11px;line-height:1.75}
+.checkout-form{display:grid;gap:14px;padding:3px 0 0}
+.checkout-form label{display:grid;gap:6px;color:#514a42;font-size:9px;letter-spacing:.06em;text-transform:uppercase}
+.checkout-form label span{display:inline;color:#a0978d;font-size:8px;letter-spacing:0;text-transform:none}
+.checkout-form input,.checkout-form textarea{width:100%;border:1px solid #ddd6cb;background:#fffefa;padding:11px 12px;color:#28231f;font-size:12px;outline:none;resize:vertical}
+.checkout-form input:focus,.checkout-form textarea:focus{border-color:var(--brand-accent,#e90000);box-shadow:0 0 0 2px color-mix(in srgb,var(--brand-accent,#e90000) 13%,transparent)}
+.checkout-two-col{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.checkout-summary{display:grid;grid-template-columns:1fr auto;gap:5px;padding:14px 0;border-top:1px solid var(--line);color:#655c52;font-size:10px}
+.checkout-summary strong{font-size:13px;color:var(--ink)}
+.checkout-summary ul{grid-column:1/-1;display:grid;gap:7px;margin:8px 0 3px;padding:0;list-style:none;color:#766d63;font-size:10px}
+.checkout-summary li{display:flex;justify-content:space-between;gap:12px}
+.checkout-summary li span{color:#514a42;white-space:nowrap}
+.checkout-summary small{grid-column:1/-1;color:#92877b;font-size:9px}
+.checkout-button{width:100%;border:0}
+.whatsapp-button{width:100%;margin-top:10px;border-color:#c8d8c5;background:#f4f8f1;color:#315b38;gap:10px}
+.whatsapp-button:hover{background:#eaf3e7}
+.checkout-mail-note{margin:11px 0;color:#91877d;font-size:9px;line-height:1.6;text-align:center}
+.checkout-back{display:block;margin:8px auto 0}
+.whatsapp-float{position:fixed;right:24px;bottom:24px;z-index:35;display:flex;align-items:center;gap:9px;padding:13px 17px;border-radius:999px;background:#238b4b;color:white;box-shadow:0 8px 28px #0002;font-size:10px;letter-spacing:.04em;transition:transform .2s,background .2s}
+.whatsapp-float:hover{transform:translateY(-3px);background:#19783e}
+@media(max-width:650px){.checkout-two-col{grid-template-columns:1fr}.whatsapp-float{right:15px;bottom:15px;padding:13px;border-radius:50%}.whatsapp-float span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}}
+@media(prefers-reduced-motion:reduce){.whatsapp-float{transition:none}}
