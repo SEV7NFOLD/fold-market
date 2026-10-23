@@ -9,8 +9,12 @@ import { getStorefront } from "@/lib/storefront";
 import { StoreFooter } from "@/components/store-footer";
 import { FavoriteButton } from "@/components/favorite-button";
 
+// Product catalogs are vendor-scoped and selected from the incoming hostname.
+// Avoid querying the request-scoped Supabase client during the build; product
+// pages render on demand for the vendor serving the request.
+export const dynamic = "force-dynamic";
 export const dynamicParams = true;
-export async function generateStaticParams() { const { products } = await getStorefront(); return products.map(({ slug }) => ({ slug })); }
+export async function generateStaticParams() { return []; }
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const { products } = await getStorefront();
