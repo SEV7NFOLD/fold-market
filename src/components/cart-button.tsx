@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { MessageCircle, ShoppingBag, X } from "lucide-react";
 import Image from "next/image";
+import { createPortal } from "react-dom";
 import { useCart } from "@/components/cart-provider";
 import { formatPrice } from "@/lib/demo-data";
 
@@ -18,6 +19,23 @@ export function CartButton() {
   const orderLines = lines.map(({ product, quantity }) => `${quantity} × ${product.name} — ${formatPrice(product.price * quantity, product.currency)}`);
   const orderSummary = orderLines.join("\n");
   const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(`Hello Prime Kare\n\nI would like to ask about this order:\n${orderSummary}\n\nSubtotal: ${formatPrice(subtotal, currency)}`)}`;
+
+  useEffect(() => {
+    if (!open) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+        setCheckout(false);
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [open]);
 
   function sendEnquiry(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -48,7 +66,7 @@ export function CartButton() {
     <button className="icon-button cart-trigger" type="button" aria-label={`Open shopping bag, ${count} items`} onClick={() => setOpen(true)}>
       <ShoppingBag size={19} strokeWidth={1.5} /><span className="cart-count">{count}</span>
     </button>
-    {open && <div className="drawer-backdrop" role="presentation" onClick={() => { setOpen(false); setCheckout(false); }}>
+    {open && createPortal(<div className="drawer-backdrop" role="presentation" onClick={() => { setOpen(false); setCheckout(false); }}>
       <aside className="cart-drawer" role="dialog" aria-modal="true" aria-labelledby="cart-title" onClick={(event) => event.stopPropagation()}>
         <div className="drawer-head"><h2 id="cart-title">{checkout ? "Your details" : <>Your bag <span>({count})</span></>}</h2><button className="icon-button" onClick={() => { setOpen(false); setCheckout(false); }} aria-label="Close bag"><X size={20} /></button></div>
         {lines.length === 0 ? <div className="cart-empty"><span className="empty-mark"><ShoppingBag /></span><p>Your ritual is waiting.</p><span>Discover something good for your shelf.</span><button className="button button-dark" onClick={() => setOpen(false)}>Explore the edit</button></div> : checkout ? <>
@@ -73,6 +91,6 @@ export function CartButton() {
           <div className="cart-bottom"><div className="subtotal"><span>Subtotal</span><strong>{formatPrice(subtotal, currency)}</strong></div><span className="shipping-note">Delivery is confirmed directly with Prime Kare.</span><button className="button button-dark checkout-button" type="button" onClick={() => setCheckout(true)}>Continue to checkout <span>↗</span></button><a className="button whatsapp-button" href={whatsappUrl} target="_blank" rel="noreferrer"><MessageCircle size={17} /> WhatsApp your order</a><span className="demo-note">Your order is an enquiry; payment is arranged with Prime Kare.</span></div>
         </>}
       </aside>
-    </div>}
+    </div>, document.body)}
   </>;
 }
