@@ -1,7 +1,7 @@
 "use server";
 
 import { z } from "zod";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
@@ -76,6 +76,7 @@ export async function saveProduct(formData: FormData) {
     ? await supabase.from("products").update(record).eq("id", id).eq("vendor_id", vendorId)
     : await supabase.from("products").insert({ ...record, vendor_id: vendorId });
   if (error) redirect("/admin?error=database");
+  updateTag("public-storefront");
   revalidatePath("/admin");
   revalidatePath("/");
   revalidatePath("/products/[slug]", "page");
@@ -89,6 +90,7 @@ export async function deleteProduct(formData: FormData) {
   const supabase = await requireEditor(vendorId);
   const { error } = await supabase.from("products").delete().eq("id", id).eq("vendor_id", vendorId);
   if (error) redirect("/admin?error=database");
+  updateTag("public-storefront");
   revalidatePath("/admin");
   revalidatePath("/");
   revalidatePath("/products/[slug]", "page");
